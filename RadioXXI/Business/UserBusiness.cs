@@ -17,6 +17,11 @@ namespace RadioXXI.Business
 
         }
 
+        public Users getById(int id)
+        {
+            return FindByCondition(source => source.Id == id).FirstOrDefault();
+        }
+
         public UserDto getByEmail(string email)
         {
             var data = FindByCondition(user => user.Email == email).FirstOrDefault();
@@ -25,6 +30,7 @@ namespace RadioXXI.Business
 
             try
             {
+                user.Id = data.Id;
                 user.Name = data.Name;
                 user.LastName = data.LastName;
                 user.Email = data.Email;
@@ -44,6 +50,7 @@ namespace RadioXXI.Business
             var user = new UserDto();
             try
             {
+                user.Id = data.Id;
                 user.Name = data.Name;
                 user.LastName = data.LastName;
                 user.Email = data.Email;
@@ -72,6 +79,20 @@ namespace RadioXXI.Business
             SaveChanges();
         }
 
+        public void update(Users update, int id)
+        {
+            var user = getById(id);
+
+            user.Name = update.Name;
+            user.LastName = update.LastName;
+            user.Email = update.Email;
+            user.Username = update.Username;
+            user.Password = EncryptPass(update.Password);
+
+            Update(user);
+            SaveChanges();
+        }
+
         public ICollection<UserDto> getAll()
         {
             var users = new List<UserDto>();
@@ -82,6 +103,7 @@ namespace RadioXXI.Business
             {
                 var user = new UserDto()
                 {
+                    Id = data.Id,
                     Name = data.Name,
                     LastName = data.LastName,
                     Email = data.Email,
@@ -92,6 +114,12 @@ namespace RadioXXI.Business
             }
 
             return users;
+        }
+
+        public void delete(int id)
+        {
+            Delete(getById(id));
+            SaveChanges();
         }
 
         public string EncryptPass(string password)

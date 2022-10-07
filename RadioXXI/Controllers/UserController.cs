@@ -18,6 +18,8 @@ namespace RadioXXI.Controllers
             _business = business;
         }
 
+        #region NEW USER
+
         [HttpPost("new")]
         public IActionResult newUser([FromBody] Users newUser)
         {
@@ -32,6 +34,10 @@ namespace RadioXXI.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        #endregion
+
+        #region LOGIN
 
         [HttpPost("login")]
         public IActionResult login([FromBody] UserLoginDto userLogin)
@@ -52,6 +58,10 @@ namespace RadioXXI.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        #endregion
+
+        #region RECOVERY PASSWORD
 
         [HttpGet("recovery/{email}")]
         public IActionResult Update(string email)
@@ -74,6 +84,10 @@ namespace RadioXXI.Controllers
             }
         }
 
+        #endregion
+
+        #region LIST ALL USERS
+
         [HttpGet("all")]
         public IActionResult getAll()
         {
@@ -93,5 +107,44 @@ namespace RadioXXI.Controllers
                 return BadRequest(e.Message.ToString());
             }
         }
+
+        #endregion
+
+        #region UPDATE  USER
+
+        [HttpPut("update/{id}")]
+        public IActionResult update([FromBody] Users update, int id)
+        {
+            try
+            {
+                _business.update(update, id);
+
+                return Ok();
+            }
+            catch(Exception e)
+            {
+                return BadRequest(e.Message.ToString());
+            }
+        }
+
+        #endregion
+
+        #region DELETE USER
+
+        [HttpDelete("delete/{id}")]
+        public IActionResult delete(int id)
+        {
+            try
+            {
+                _business.delete(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message.ToString());
+            }
+        }
+
+        #endregion
     }
 }
